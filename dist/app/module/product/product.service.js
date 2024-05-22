@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductServices = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 const product_model_1 = __importDefault(require("./product.model"));
 const createProductIntoDB = (ProductData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_model_1.default.create(ProductData);
@@ -22,7 +23,17 @@ const getAllProductsFromDB = () => __awaiter(void 0, void 0, void 0, function* (
     const result = yield product_model_1.default.find();
     return result;
 });
+const getSingleProductsFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const objectId = new mongoose_1.default.Types.ObjectId(id);
+    return yield product_model_1.default.findById(objectId);
+});
+const updateSingleProductIntoDB = (id, productData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.default.findByIdAndUpdate(id, productData);
+    return result;
+});
 exports.ProductServices = {
     createProductIntoDB,
-    getAllProductsFromDB
+    getAllProductsFromDB,
+    getSingleProductsFromDB,
+    updateSingleProductIntoDB
 };
