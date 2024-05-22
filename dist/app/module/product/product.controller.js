@@ -72,7 +72,7 @@ const getSingleStudents = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
 });
-// upate single product 
+// upate single product
 const updateSingleProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const product = req.body;
@@ -80,15 +80,60 @@ const updateSingleProduct = (req, res) => __awaiter(void 0, void 0, void 0, func
         const result = yield product_service_1.ProductServices.updateSingleProductIntoDB(productId, product);
         res.status(200).json({
             success: true,
-            message: "Products updated successfully!",
+            message: 'Products updated successfully!',
             data: result,
         });
     }
     catch (error) {
         res.status(500).json({
             success: false,
-            message: "Something went wrong",
+            message: 'Something went wrong',
             error: error,
+        });
+    }
+});
+//delete single product
+const deleteSingleProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { productId } = req.params;
+        const result = yield product_service_1.ProductServices.deleteSingleProductIntoDB(productId);
+        res.status(200).json({
+            success: true,
+            message: 'Product deleted successfully!',
+            data: result,
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: error,
+        });
+    }
+});
+// search product 
+const searchProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { searchTerm } = req.query;
+        console.log(`search query is  ${searchTerm}`);
+        if (!searchTerm) {
+            return res.status(400).json({
+                success: false,
+                message: 'Search term is required'
+            });
+        }
+        const result = yield product_service_1.ProductServices.searchProductsFromDB(searchTerm);
+        res.status(200).json({
+            success: true,
+            message: `Products matching search term '${searchTerm}' fetched successfully!`,
+            data: result
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while searching for products',
+            error: error
         });
     }
 });
@@ -96,5 +141,7 @@ exports.ProductControllers = {
     createProduct,
     getAllStudents,
     getSingleStudents,
-    updateSingleProduct
+    updateSingleProduct,
+    deleteSingleProduct,
+    searchProducts
 };

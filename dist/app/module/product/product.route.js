@@ -10,5 +10,7 @@ const router = express_1.default.Router();
 router.post('/api/products', product_controller_1.ProductControllers.createProduct);
 router.get('/api/products', product_controller_1.ProductControllers.getAllStudents);
 router.get('/api/products/:productId', product_controller_1.ProductControllers.getSingleStudents);
-router.put("/api/products/:productId", product_controller_1.ProductControllers.updateSingleProduct);
+router.put('/api/products/:productId', product_controller_1.ProductControllers.updateSingleProduct);
+router.delete('/api/products/:productId', product_controller_1.ProductControllers.deleteSingleProduct);
+router.get('api/products/search', product_controller_1.ProductControllers.searchProducts);
 exports.ProductRoutes = router;

@@ -31,9 +31,26 @@ const updateSingleProductIntoDB = (id, productData) => __awaiter(void 0, void 0,
     const result = yield product_model_1.default.findByIdAndUpdate(id, productData);
     return result;
 });
+// deleted product
+const deleteSingleProductIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.default.findByIdAndDelete(id);
+    return result;
+});
+// search item
+const searchProductsFromDB = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield product_model_1.default.find({
+        $or: [
+            { name: new RegExp(searchTerm, 'i') },
+            { description: new RegExp(searchTerm, 'i') },
+            { tags: new RegExp(searchTerm, 'i') }
+        ]
+    });
+});
 exports.ProductServices = {
     createProductIntoDB,
     getAllProductsFromDB,
     getSingleProductsFromDB,
-    updateSingleProductIntoDB
+    updateSingleProductIntoDB,
+    deleteSingleProductIntoDB,
+    searchProductsFromDB
 };

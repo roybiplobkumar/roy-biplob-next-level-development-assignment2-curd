@@ -107,10 +107,40 @@ const deleteSingleProduct = async (req: Request, res: Response) => {
   }
 };
 
+// search product
+const searchProducts = async (req: Request, res: Response) => {
+  try {
+    const { searchTerm } = req.query;
+    console.log(`search query is  ${searchTerm}`);
+    if (!searchTerm) {
+      return res.status(400).json({
+        success: false,
+        message: 'Search term is required',
+      });
+    }
+
+    const result = await ProductServices.searchProductsFromDB(
+      searchTerm as string,
+    );
+    res.status(200).json({
+      success: true,
+      message: `Products matching search term '${searchTerm}' fetched successfully!`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while searching for products',
+      error: error,
+    });
+  }
+};
+
 export const ProductControllers = {
   createProduct,
   getAllStudents,
   getSingleStudents,
   updateSingleProduct,
   deleteSingleProduct,
+  searchProducts,
 };

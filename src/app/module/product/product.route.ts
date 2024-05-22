@@ -12,4 +12,6 @@ router.delete(
   ProductControllers.deleteSingleProduct,
 );
 
+router.get('api/products/search', ProductControllers.searchProducts);
+
 export const ProductRoutes = router;
