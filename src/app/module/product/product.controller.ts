@@ -4,6 +4,8 @@ import { ProductServices } from './product.service';
 import mongoose from 'mongoose';
 import { ProductSchema } from './validationSchemas';
 
+// create product
+
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = ProductSchema.parse(req.body);
@@ -19,6 +21,7 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
+// get all Product
 const getAllProduct = async (req: Request, res: Response) => {
   try {
     const result = await ProductServices.getAllProductsFromDB();
@@ -36,6 +39,7 @@ const getAllProduct = async (req: Request, res: Response) => {
     });
   }
 };
+//get singleProduct
 const getSingleProduct = async (req: Request, res: Response) => {
   try {
     const id = req.params.productId;
@@ -65,8 +69,8 @@ const getSingleProduct = async (req: Request, res: Response) => {
 
 // upate single product
 const updateSingleProduct = async (req: Request, res: Response) => {
+  const productData = req.body;
   const { productId } = req.params;
-  const productData = ProductSchema.parse(req.body);
 
   if (!productId) {
     return res.status(400).json({
@@ -133,7 +137,7 @@ const deleteSingleProduct = async (req: Request, res: Response) => {
 const searchProducts = async (req: Request, res: Response) => {
   try {
     const { searchTerm } = req.query;
-    console.log(`search query is  ${searchTerm}`);
+
     if (!searchTerm) {
       return res.status(400).json({
         success: false,
