@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 
 import { ProductServices } from './product.service';
 import mongoose from 'mongoose';
+import { ProductSchema } from './validationSchemas';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const productData = req.body;
-    console.log(productData);
+    const productData = ProductSchema.parse(req.body);
 
     const result = await ProductServices.createProductIntoDB(productData);
     res.status(200).json({
@@ -19,7 +19,7 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-const getAllStudents = async (req: Request, res: Response) => {
+const getAllProduct = async (req: Request, res: Response) => {
   try {
     const result = await ProductServices.getAllProductsFromDB();
 
@@ -36,7 +36,7 @@ const getAllStudents = async (req: Request, res: Response) => {
     });
   }
 };
-const getSingleStudents = async (req: Request, res: Response) => {
+const getSingleProduct = async (req: Request, res: Response) => {
   try {
     const id = req.params.productId;
     const objectId = new mongoose.Types.ObjectId(id);
@@ -65,17 +65,39 @@ const getSingleStudents = async (req: Request, res: Response) => {
 
 // upate single product
 const updateSingleProduct = async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const productData = ProductSchema.parse(req.body);
+
+  if (!productId) {
+    return res.status(400).json({
+      success: false,
+      message: 'Product ID is required',
+    });
+  }
+
+  if (!productData || Object.keys(productData).length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Product data is required',
+    });
+  }
+
   try {
-    const product = req.body;
-    const { productId } = req.params;
     const result = await ProductServices.updateSingleProductIntoDB(
       productId,
-      product,
+      productData,
     );
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
 
     res.status(200).json({
       success: true,
-      message: 'Products updated successfully!',
+      message: 'Product updated successfully!',
       data: result,
     });
   } catch (error) {
@@ -138,8 +160,8 @@ const searchProducts = async (req: Request, res: Response) => {
 
 export const ProductControllers = {
   createProduct,
-  getAllStudents,
-  getSingleStudents,
+  getAllProduct,
+  getSingleProduct,
   updateSingleProduct,
   deleteSingleProduct,
   searchProducts,

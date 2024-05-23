@@ -40,10 +40,10 @@ const gelAllOrder = async (req: Request, res: Response) => {
 
 const retrieveOrderByEmail = async (req: Request, res: Response) => {
   try {
-    const { email } = req.query;
+    const email = req.query.email;
 
     // Retrieve orders from the database for the specified email
-    const orders = await OrderService.getOrderByEmailDB(email);
+    const orders = await OrderService.getOrderByEmailDB(email as string);
 
     res.status(200).json({
       success: true,

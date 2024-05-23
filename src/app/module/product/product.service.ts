@@ -28,12 +28,8 @@ const deleteSingleProductIntoDB = async (id: string) => {
 
 // search item
 const searchProductsFromDB = async (searchTerm: string) => {
-  return await ProductModel.find({
-    $or: [
-      { name: new RegExp(searchTerm, 'i') },
-      { description: new RegExp(searchTerm, 'i') },
-      { tags: new RegExp(searchTerm, 'i') },
-    ],
+  return await ProductModel.findOne({
+    name: searchTerm,
   });
 };
 
