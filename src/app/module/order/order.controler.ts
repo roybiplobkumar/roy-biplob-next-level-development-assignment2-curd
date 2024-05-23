@@ -1,4 +1,4 @@
-import { Request, Response, request } from 'express';
+import { Request, Response } from 'express';
 
 import { OrderService } from './order.service';
 import { orderSchemaZodValidation } from './order.validation';
@@ -26,7 +26,7 @@ const gelAllOrder = async (req: Request, res: Response) => {
   if (req.query.email) {
     try {
       const email = req.query.email;
-      console.log(email);
+
       const orders = await OrderService.getOrderByEmailDB(email as string);
       if (!orders) {
         res.status(400).json({
